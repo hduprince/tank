@@ -9,17 +9,12 @@ import java.awt.event.WindowEvent;
  **/
 public class Main {
 
-    public static void main(String[] args) {
-        Frame frame = new Frame();
-        frame.setSize(800, 600);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.setTitle("tank war");
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
+    public static void main(String[] args) throws InterruptedException {
+        MyFrame frame = new MyFrame();
+
+        while (true) {
+            Thread.sleep(50);
+            frame.repaint();
+        }
     }
 }
