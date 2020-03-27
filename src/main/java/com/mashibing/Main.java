@@ -1,8 +1,5 @@
 package com.mashibing;
 
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 /**
  * @create: 2020-03-20 04:01
