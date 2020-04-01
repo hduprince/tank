@@ -1,24 +1,28 @@
 package com.mashibing;
 
+import java.util.LinkedList;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
+
 
 /**
  * @create: 2020-03-20 04:28
  **/
-public class MyFrame extends Frame {
+public class TankFrame extends Frame {
 
-    Tank mainTank = new Tank(new Point(200,200), Dir.LEFT);
-    Bullet bullet = new Bullet(new Point(200,200), Dir.LEFT);
+    private Tank mainTank = new Tank(new Point(200, 200), Dir.LEFT, this);
+
+    private java.util.List<Bullet> bullets = new LinkedList<Bullet>();
 
     private final static int GAME_WIDTH = 800;
     private final static int GAME_HEIGHT = 600;
 
 
-    public MyFrame() {
+    public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setVisible(true);
@@ -34,11 +38,14 @@ public class MyFrame extends Frame {
     }
 
 
-
     @Override
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.blue);
+        g.drawString("子弹总数:"+bullets.size(), 30, 50);
+        g.setColor(c);
         mainTank.paint(g);
-        bullet.paint(g);
+        bullets.stream().forEach(bullet -> bullet.paint(g));
     }
 
 
@@ -46,19 +53,44 @@ public class MyFrame extends Frame {
         @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
-            mainTank.changeDir(keyCode, true);
+            switch (keyCode) {
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_DOWN:
+                    mainTank.changeDir(keyCode, true);
+                    break;
+            }
+
         }
 
 
         @Override
         public void keyReleased(KeyEvent e) {
-//            int keyCode = e.getKeyCode();
-//            mainTank.move(keyCode, false);
+            int keyCode = e.getKeyCode();
+            switch (keyCode) {
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_DOWN:
+                    mainTank.changeDir(keyCode, false);
+                    break;
+                case KeyEvent.VK_CONTROL:
+                    mainTank.fire();
+                    break;
+            }
         }
 
     }
 
 
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public void setBullets(List<Bullet> bullets) {
+        this.bullets = bullets;
+    }
 
     //解决屏幕闪烁问题
 //    Image offScreenImage = null;
@@ -76,5 +108,8 @@ public class MyFrame extends Frame {
 //        g.drawImage(offScreenImage, GAME_WIDTH, GAME_HEIGHT, null);
 //
 //    }
-
 }
+
+
+
+

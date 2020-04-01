@@ -7,7 +7,7 @@ package com.mashibing;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        MyFrame frame = new MyFrame();
+        TankFrame frame = new TankFrame();
 
         while (true) {
             Thread.sleep(50);
