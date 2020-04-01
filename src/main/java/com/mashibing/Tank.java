@@ -1,6 +1,7 @@
 package com.mashibing;
 
 
+import javax.annotation.Resource;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -16,8 +17,8 @@ public class Tank implements Runnable, Movable {
     private volatile boolean moving = false;
     private static final int SPEED = 10;
 
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 50;
+    private static final int WIDTH = ResourceMgr.tankD.getWidth();
+    private static final int HEIGHT = ResourceMgr.tankD.getHeight();
 
 
     public Tank(Point point, Dir dir, TankFrame tankFrame) {
@@ -27,7 +28,21 @@ public class Tank implements Runnable, Movable {
     }
 
     public void paint(Graphics g) {
-        g.fillRect(point.getX(), point.getY(), WIDTH, HEIGHT);
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.tankL, this.point.getX(), this.point.getY(), null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.tankU, this.point.getX(), this.point.getY(), null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.tankD, this.point.getX(), this.point.getY(), null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.tankR, this.point.getX(), this.point.getY(), null);
+                break;
+        }
+
     }
 
     public void run() {

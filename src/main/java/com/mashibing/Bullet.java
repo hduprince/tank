@@ -14,8 +14,8 @@ public class Bullet implements Movable {
 
     private static final int SPEED = 10;
 
-    public static final int WIGHT = 10;
-    public static final int HEIGHT = 10;
+    public static final int WIGHT = ResourceMgr.bulletD.getWidth();
+    public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
 
     public Bullet(Point point, Dir dir, TankFrame tankFrame) {
         this.point = point;
@@ -31,10 +31,23 @@ public class Bullet implements Movable {
             return;
         }
 
-        Color c = g.getColor();
-        g.setColor(Color.red);
-        g.fillOval(point.getX(), point.getY(), WIGHT, HEIGHT);
-        g.setColor(c);
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.bulletL, this.point.getX(), this.point.getY(), null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.bulletU, this.point.getX(), this.point.getY(), null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.bulletD, this.point.getX(), this.point.getY(), null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.bulletR, this.point.getX(), this.point.getY(), null);
+                break;
+        }
+
+
+
         move(dir, point, SPEED);
     }
 

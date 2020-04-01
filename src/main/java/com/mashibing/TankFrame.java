@@ -18,8 +18,8 @@ public class TankFrame extends Frame {
 
     private java.util.List<Bullet> bullets = new LinkedList<Bullet>();
 
-    private final static int GAME_WIDTH = 800;
-    private final static int GAME_HEIGHT = 600;
+    private final static int GAME_WIDTH = 1000;
+    private final static int GAME_HEIGHT = 800;
 
 
     public TankFrame() {
@@ -27,6 +27,7 @@ public class TankFrame extends Frame {
         setResizable(false);
         setVisible(true);
         setTitle("tank war");
+        setBackground(Color.black);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -41,7 +42,7 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         Color c = g.getColor();
-        g.setColor(Color.blue);
+        g.setColor(Color.yellow);
         g.drawString("子弹总数:"+bullets.size(), 30, 50);
         g.setColor(c);
         mainTank.paint(g);
