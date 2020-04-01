@@ -7,12 +7,12 @@ import java.awt.event.KeyEvent;
 /**
  * @create: 2020-03-20 05:25
  **/
-public class Tank implements Runnable, Moving{
+public class Tank implements Runnable, Movable {
 
     private Point point;
     private Dir dir;
 
-    private boolean moving = false;
+    private volatile boolean moving = false;
 
     private static final int SPEED = 10;
 
@@ -33,7 +33,9 @@ public class Tank implements Runnable, Moving{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            move(dir, point, SPEED);
+            if(moving){
+                move(dir, point, SPEED);
+            }
         }
     }
 

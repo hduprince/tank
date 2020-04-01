@@ -5,7 +5,7 @@ package com.mashibing;
  * @author: hduprince
  * @create: 2020-03-30 15:45
  **/
-public interface Moving {
+public interface Movable {
 
     default void move(Dir dir, Point point, Integer speed){
         switch (dir) {

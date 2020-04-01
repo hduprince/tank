@@ -1,12 +1,11 @@
 package com.mashibing;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 /**
  * @create: 2020-03-27 11:28
  **/
-public class Bullet implements Moving{
+public class Bullet implements Movable {
 
     private Point point;
     private Dir dir;

@@ -61,20 +61,20 @@ public class MyFrame extends Frame {
 
 
     //解决屏幕闪烁问题
-    Image offScreenImage = null;
-    @Override
-    public void update(Graphics g) {
-        if(offScreenImage == null){
-            offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
-        }
-        Graphics gOffScreen = offScreenImage.getGraphics();
-        Color c = gOffScreen.getColor();
-        gOffScreen.setColor(Color.black);
-        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        gOffScreen.setColor(c);
-        paint(gOffScreen);
-        g.drawImage(offScreenImage, GAME_WIDTH, GAME_HEIGHT, null);
-
-    }
+//    Image offScreenImage = null;
+//    @Override
+//    public void update(Graphics g) {
+//        if(offScreenImage == null){
+//            offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
+//        }
+//        Graphics gOffScreen = offScreenImage.getGraphics();
+//        Color c = gOffScreen.getColor();
+//        gOffScreen.setColor(Color.black);
+//        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+//        gOffScreen.setColor(c);
+//        paint(gOffScreen);
+//        g.drawImage(offScreenImage, GAME_WIDTH, GAME_HEIGHT, null);
+//
+//    }
 
 }
