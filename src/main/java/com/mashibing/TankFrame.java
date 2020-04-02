@@ -1,5 +1,8 @@
 package com.mashibing;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
+import java.util.Collections;
 import java.util.LinkedList;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -7,6 +10,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 
 /**
@@ -14,12 +19,14 @@ import java.util.List;
  **/
 public class TankFrame extends Frame {
 
-    private Tank mainTank = new Tank(new Point(200, 200), Dir.LEFT, this);
+    private Tank mainTank = new Tank(new Point(200, 400), Dir.LEFT, Group.GOOD, this);
 
-    private java.util.List<Bullet> bullets = new LinkedList<Bullet>();
+    private List<Bullet> bullets = Collections.synchronizedList(new LinkedList<>());
+    private List<Tank> enemies = Collections.synchronizedList(new LinkedList<>());
 
-    private final static int GAME_WIDTH = 1000;
-    private final static int GAME_HEIGHT = 800;
+
+    public final static int GAME_WIDTH = 800;
+    public final static int GAME_HEIGHT = 600;
 
 
     public TankFrame() {
@@ -36,6 +43,12 @@ public class TankFrame extends Frame {
         });
         addKeyListener(new MyKeyListener());
         new Thread(mainTank).start();
+
+        for (int i = 0; i < 5; i++) {
+            Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD, this);
+            enemies.add(tank);
+            new Thread(tank).start();
+        }
     }
 
 
@@ -43,10 +56,27 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.yellow);
-        g.drawString("子弹总数:"+bullets.size(), 30, 50);
+        g.drawString("子弹总数:" + bullets.size(), 30, 50);
+        g.drawString("敌军总数:" + enemies.size(), 30, 70);
         g.setColor(c);
         mainTank.paint(g);
-        bullets.stream().forEach(bullet -> bullet.paint(g));
+
+
+        for (int i = 0; i < bullets.size(); i++) {
+            System.out.println("i="+i+",size="+bullets.size());
+            bullets.get(i).paint(g);
+        }
+
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).paint(g);
+        }
+
+        //碰撞检查
+        for (int j = 0; j < enemies.size(); j++) {
+            for (int i = 0; i < bullets.size(); i++) {
+                enemies.get(j).colliding(bullets.get(i));
+            }
+        }
     }
 
 
@@ -76,7 +106,7 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_DOWN:
                     mainTank.changeDir(keyCode, false);
                     break;
-                case KeyEvent.VK_CONTROL:
+                case KeyEvent.VK_B:
                     mainTank.fire();
                     break;
             }
@@ -91,6 +121,14 @@ public class TankFrame extends Frame {
 
     public void setBullets(List<Bullet> bullets) {
         this.bullets = bullets;
+    }
+
+    public List<Tank> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(List<Tank> enemies) {
+        this.enemies = enemies;
     }
 
     //解决屏幕闪烁问题

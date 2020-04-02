@@ -1,5 +1,7 @@
 package com.mashibing;
 
+import java.awt.*;
+
 /**
  * @program: tank
  * @author: hduprince
@@ -10,17 +12,21 @@ public interface Movable {
     default void move(Dir dir, Point point, Integer speed){
         switch (dir) {
             case LEFT:
-                point.setX(point.getX() - speed);
+                point.x  = point.x - speed;
                 break;
             case RIGHT:
-                point.setX(point.getX() + speed);
+                point.x  = point.x + speed;
                 break;
             case UP:
-                point.setY(point.getY() - speed);
+                point.y  = point.y - speed;
                 break;
             case DOWN:
-                point.setY(point.getY() + speed);
+                point.y  = point.y + speed;
                 break;
         }
+        resize();
+
     }
+
+    void resize();
 }
