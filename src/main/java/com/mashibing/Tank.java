@@ -19,9 +19,9 @@ public class Tank implements Runnable, Movable {
     private Rectangle rectangle;
 
     private volatile boolean moving = true;
-    private static final int SPEED = 10;
-    private static final int WIDTH = ResourceMgr.tankD.getWidth();
-    private static final int HEIGHT = ResourceMgr.tankD.getHeight();
+    private static final int SPEED = ConfigMgr.getInt("tankSpeed");;
+    private static final int WIDTH = ResourceMgr.goodTank1U.getWidth();
+    private static final int HEIGHT = ResourceMgr.goodTank1U.getHeight();
 
     private Random random = new Random();
 
@@ -39,16 +39,16 @@ public class Tank implements Runnable, Movable {
         if ( living ) {
             switch (dir) {
                 case LEFT:
-                    g.drawImage(ResourceMgr.tankL, this.point.x, this.point.y, null);
+                    g.drawImage(group == Group.GOOD ? ResourceMgr.goodTank1L : ResourceMgr.badTank1L, this.point.x, this.point.y, null);
                     break;
                 case UP:
-                    g.drawImage(ResourceMgr.tankU, this.point.x, this.point.y, null);
+                    g.drawImage(group == Group.GOOD ? ResourceMgr.goodTank1U : ResourceMgr.badTank1U, this.point.x, this.point.y, null);
                     break;
                 case DOWN:
-                    g.drawImage(ResourceMgr.tankD, this.point.x, this.point.y, null);
+                    g.drawImage(group == Group.GOOD ? ResourceMgr.goodTank1D : ResourceMgr.badTank1D,  this.point.x, this.point.y, null);
                     break;
                 case RIGHT:
-                    g.drawImage(ResourceMgr.tankR, this.point.x, this.point.y, null);
+                    g.drawImage(group == Group.GOOD ? ResourceMgr.goodTank1R : ResourceMgr.badTank1R,  this.point.x, this.point.y, null);
                     break;
             }
         }
@@ -102,6 +102,7 @@ public class Tank implements Runnable, Movable {
                     dir = Dir.DOWN;
                     break;
             }
+            new Thread(()->new Audio("audio/tank_move.wav").play()).start();
         } else {
             moving = false;
         }
@@ -131,7 +132,8 @@ public class Tank implements Runnable, Movable {
         }
         Bullet bullet = new Bullet(new Point(x, y), this.dir, this.group, this.tankFrame);
         this.tankFrame.getBullets().add(bullet);
-        System.out.println("fire tankFrame.getBullets().size=" + tankFrame.getBullets().size() );
+
+        if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
 
     }
 
@@ -152,6 +154,10 @@ public class Tank implements Runnable, Movable {
 
     private void die() {
         this.living = false;
+        int eX = point.x + Tank.WIDTH/2 - Explode.WIDTH/2;
+        int eY = point.y + Tank.HEIGHT/2 - Explode.HEIGHT/2;
+        tankFrame.explodes.add(new Explode(new Point(eX, eY), tankFrame));
+
         tankFrame.getEnemies().remove(this);
     }
 

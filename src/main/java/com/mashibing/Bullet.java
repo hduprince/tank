@@ -16,7 +16,7 @@ public class Bullet implements Movable {
 
     private Rectangle rectangle;
 
-    private static final int SPEED = 10;
+    private static final int SPEED = ConfigMgr.getInt("bulletSpeed");
 
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
@@ -29,13 +29,12 @@ public class Bullet implements Movable {
         rectangle = new Rectangle(point.x, point.y, WIDTH, HEIGHT);
     }
 
-    public boolean paint(Graphics g) {
+    public void paint(Graphics g) {
 
         move(dir, point, SPEED);
         if(point.getX() <= 0 || point.getX()+WIDTH >= TankFrame.GAME_WIDTH
         || point.getY() <= 80 || point.getY()+HEIGHT >= TankFrame.GAME_HEIGHT){
             this.die();
-            return false;
         }
         switch (dir) {
             case LEFT:
@@ -51,7 +50,6 @@ public class Bullet implements Movable {
                 g.drawImage(ResourceMgr.bulletR, this.point.x, this.point.y, null);
                 break;
         }
-        return true;
     }
 
     public boolean getLiving() {
@@ -74,7 +72,6 @@ public class Bullet implements Movable {
     public void die() {
         this.living = false;
         tankFrame.getBullets().remove(this);
-        System.out.println(Thread.currentThread().getName()+"die tankFrame.getBullets().size=" + tankFrame.getBullets().size() );
     }
 
     @Override

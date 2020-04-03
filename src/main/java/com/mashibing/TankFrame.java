@@ -23,10 +23,11 @@ public class TankFrame extends Frame {
 
     private List<Bullet> bullets = Collections.synchronizedList(new LinkedList<>());
     private List<Tank> enemies = Collections.synchronizedList(new LinkedList<>());
+    public List<Explode> explodes = Collections.synchronizedList(new LinkedList<>());
 
 
-    public final static int GAME_WIDTH = 800;
-    public final static int GAME_HEIGHT = 600;
+    public final static int GAME_WIDTH = ConfigMgr.getInt("gameWidth");
+    public final static int GAME_HEIGHT = ConfigMgr.getInt("gameHeight");
 
 
     public TankFrame() {
@@ -44,7 +45,7 @@ public class TankFrame extends Frame {
         addKeyListener(new MyKeyListener());
         new Thread(mainTank).start();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < ConfigMgr.getInt("enemyCount"); i++) {
             Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD, this);
             enemies.add(tank);
             new Thread(tank).start();
@@ -58,17 +59,21 @@ public class TankFrame extends Frame {
         g.setColor(Color.yellow);
         g.drawString("子弹总数:" + bullets.size(), 30, 50);
         g.drawString("敌军总数:" + enemies.size(), 30, 70);
+        g.drawString("爆炸总数:" + explodes.size(), 30, 90);
         g.setColor(c);
         mainTank.paint(g);
 
 
         for (int i = 0; i < bullets.size(); i++) {
-            System.out.println("i="+i+",size="+bullets.size());
             bullets.get(i).paint(g);
         }
 
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).paint(g);
+        }
+
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).paint(g);
         }
 
         //碰撞检查
