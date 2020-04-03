@@ -1,0 +1,5 @@
+tankSpeed=10
+bulletSpeed=10
+gameWidth=1000
+gameHeight=700
+enemyCount=8
