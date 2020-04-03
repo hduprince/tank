@@ -17,6 +17,8 @@ public class ResourceMgr {
 
     public static BufferedImage[] explodeImg = new BufferedImage[16];
 
+    private ResourceMgr(){}
+
 
     static {
         try {

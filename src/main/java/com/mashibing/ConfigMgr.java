@@ -9,6 +9,8 @@ import java.util.Properties;
 public class ConfigMgr {
 
 
+    private ConfigMgr(){}
+
     static Properties properties = new Properties();
 
     static {
