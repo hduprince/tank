@@ -3,3 +3,5 @@ bulletSpeed=10
 gameWidth=1000
 gameHeight=700
 enemyCount=8
+goodFS=com.mashibing.strategy.FourDirFireStrategy
+badFS=com.mashibing.strategy.DefaultFireStrategy

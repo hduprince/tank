@@ -11,14 +11,11 @@ public class Explode {
     public static final int WIDTH = ResourceMgr.explodeImg[0].getWidth();
     public static final int HEIGHT =  ResourceMgr.explodeImg[0].getHeight();
 
-    private TankFrame tankFrame;
-
     private int step = 0;
 
 
-    public Explode(Point point, TankFrame tankFrame) {
+    public Explode(Point point) {
         this.point = point;
-        this.tankFrame = tankFrame;
         new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
 
@@ -26,7 +23,7 @@ public class Explode {
         g.drawImage(ResourceMgr.explodeImg[step++], point.x, point.y, null);
 
         if(step >= ResourceMgr.explodeImg.length)
-            tankFrame.explodes.remove(this);
+            TankFrame.INSTANCE.explodes.remove(this);
     }
 
 }

@@ -1,6 +1,10 @@
 package com.mashibing;
 
 
+import com.mashibing.strategy.DefaultFireStrategy;
+import com.mashibing.strategy.FireStrategy;
+import com.mashibing.strategy.FourDirFireStrategy;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
@@ -11,27 +15,41 @@ import java.util.Random;
  **/
 public class Tank implements Runnable, Movable {
 
-    private Point point;
-    private Dir dir;
-    private TankFrame tankFrame;
-    private Group group;
+    public Point point;
+    public Dir dir;
+    public Group group;
     private volatile boolean living = true;
     private Rectangle rectangle;
+    private FireStrategy fireStrategy;
+
 
     private volatile boolean moving = true;
     private static final int SPEED = ConfigMgr.getInt("tankSpeed");;
-    private static final int WIDTH = ResourceMgr.goodTank1U.getWidth();
-    private static final int HEIGHT = ResourceMgr.goodTank1U.getHeight();
+    public static final int WIDTH = ResourceMgr.goodTank1U.getWidth();
+    public static final int HEIGHT = ResourceMgr.goodTank1U.getHeight();
 
     private Random random = new Random();
 
 
-    public Tank(Point point, Dir dir, Group group, TankFrame tankFrame) {
+    public Tank(Point point, Dir dir, Group group) {
         this.point = point;
         this.dir = dir;
-        this.tankFrame = tankFrame;
         this.group = group;
         rectangle = new Rectangle(point.x, point.y, WIDTH, HEIGHT);
+        if(group == Group.GOOD){
+            try {
+                fireStrategy = (FireStrategy) Class.forName(ConfigMgr.getString("goodFS")).newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                fireStrategy = (FireStrategy) Class.forName(ConfigMgr.getString("badFS")).newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void paint(Graphics g) {
@@ -110,31 +128,7 @@ public class Tank implements Runnable, Movable {
 
 
     public void fire() {
-        int x = 0, y = 0;
-        //计算子弹位置
-        switch (dir) {
-            case UP:
-                x = this.point.x + WIDTH / 2 - Bullet.WIDTH / 2;
-                y = this.point.y;
-                break;
-            case DOWN:
-                x = this.point.x + WIDTH / 2 - Bullet.WIDTH / 2;
-                y = this.point.y + HEIGHT;
-                break;
-            case LEFT:
-                x = this.point.x;
-                y = this.point.y + HEIGHT / 2 - Bullet.HEIGHT / 2;
-                break;
-            case RIGHT:
-                x = this.point.x + WIDTH;
-                y = this.point.y + HEIGHT / 2 - Bullet.HEIGHT / 2;
-                break;
-        }
-        Bullet bullet = new Bullet(new Point(x, y), this.dir, this.group, this.tankFrame);
-        this.tankFrame.getBullets().add(bullet);
-
-        if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
-
+        fireStrategy.fire(this);
     }
 
     @Override
@@ -156,9 +150,9 @@ public class Tank implements Runnable, Movable {
         this.living = false;
         int eX = point.x + Tank.WIDTH/2 - Explode.WIDTH/2;
         int eY = point.y + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-        tankFrame.explodes.add(new Explode(new Point(eX, eY), tankFrame));
+        TankFrame.INSTANCE.explodes.add(new Explode(new Point(eX, eY)));
 
-        tankFrame.getEnemies().remove(this);
+        TankFrame.enemies.remove(this);
     }
 
 

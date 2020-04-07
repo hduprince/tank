@@ -1,17 +1,13 @@
 package com.mashibing;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
-import java.util.Collections;
-import java.util.LinkedList;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 
 /**
@@ -19,39 +15,39 @@ import java.util.concurrent.LinkedBlockingDeque;
  **/
 public class TankFrame extends Frame {
 
-    private Tank mainTank = new Tank(new Point(200, 400), Dir.LEFT, Group.GOOD, this);
-
-    private List<Bullet> bullets = Collections.synchronizedList(new LinkedList<>());
-    private List<Tank> enemies = Collections.synchronizedList(new LinkedList<>());
-    public List<Explode> explodes = Collections.synchronizedList(new LinkedList<>());
-
 
     public final static int GAME_WIDTH = ConfigMgr.getInt("gameWidth");
     public final static int GAME_HEIGHT = ConfigMgr.getInt("gameHeight");
+    private static Tank mainTank = new Tank(new Point(200, 400), Dir.LEFT, Group.GOOD);
+    public static TankFrame INSTANCE = new TankFrame();
 
+    public static List<Bullet> bullets = Collections.synchronizedList(new LinkedList<>());
+    public static List<Tank> enemies = Collections.synchronizedList(new LinkedList<>());
+    public static List<Explode> explodes = Collections.synchronizedList(new LinkedList<>());
 
-    public TankFrame() {
-        setSize(GAME_WIDTH, GAME_HEIGHT);
-        setResizable(false);
-        setVisible(true);
-        setTitle("tank war");
-        setBackground(Color.black);
-        addWindowListener(new WindowAdapter() {
+    static {
+        INSTANCE.setSize(GAME_WIDTH, GAME_HEIGHT);
+        INSTANCE.setResizable(false);
+        INSTANCE.setVisible(true);
+        INSTANCE.setTitle("tank war");
+        INSTANCE.setBackground(Color.black);
+        INSTANCE.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
         });
-        addKeyListener(new MyKeyListener());
+        INSTANCE.addKeyListener(new MyKeyListener());
         new Thread(mainTank).start();
 
         for (int i = 0; i < ConfigMgr.getInt("enemyCount"); i++) {
-            Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD, this);
+            Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD);
             enemies.add(tank);
             new Thread(tank).start();
         }
     }
 
+    private TankFrame() { }
 
     @Override
     public void paint(Graphics g) {
@@ -85,7 +81,7 @@ public class TankFrame extends Frame {
     }
 
 
-    class MyKeyListener extends KeyAdapter {
+    static class MyKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
@@ -117,23 +113,6 @@ public class TankFrame extends Frame {
             }
         }
 
-    }
-
-
-    public List<Bullet> getBullets() {
-        return bullets;
-    }
-
-    public void setBullets(List<Bullet> bullets) {
-        this.bullets = bullets;
-    }
-
-    public List<Tank> getEnemies() {
-        return enemies;
-    }
-
-    public void setEnemies(List<Tank> enemies) {
-        this.enemies = enemies;
     }
 
     //解决屏幕闪烁问题

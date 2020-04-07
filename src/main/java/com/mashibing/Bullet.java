@@ -10,7 +10,6 @@ public class Bullet implements Movable {
     private Point point;
     private Dir dir;
     private boolean living = true;
-    private TankFrame tankFrame;
     public Group group;
 
 
@@ -21,10 +20,9 @@ public class Bullet implements Movable {
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
 
-    public Bullet(Point point, Dir dir, Group group, TankFrame tankFrame) {
+    public Bullet(Point point, Dir dir, Group group) {
         this.point = point;
         this.dir = dir;
-        this.tankFrame = tankFrame;
         this.group = group;
         rectangle = new Rectangle(point.x, point.y, WIDTH, HEIGHT);
     }
@@ -71,7 +69,7 @@ public class Bullet implements Movable {
 
     public void die() {
         this.living = false;
-        tankFrame.getBullets().remove(this);
+        TankFrame.bullets.remove(this);
     }
 
     @Override

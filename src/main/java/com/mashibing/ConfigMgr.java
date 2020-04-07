@@ -25,4 +25,9 @@ public class ConfigMgr {
         if(properties == null) return null;
         return Integer.parseInt(properties.getProperty(key));
     }
+
+    public static String getString(String key){
+        if(properties == null) return null;
+        return properties.getProperty(key);
+    }
 }
