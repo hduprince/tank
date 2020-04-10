@@ -1,6 +1,7 @@
 package com.mashibing;
 
 import java.awt.*;
+import java.util.function.Function;
 
 /**
  * @program: tank
@@ -24,9 +25,6 @@ public interface Movable {
                 point.y  = point.y + speed;
                 break;
         }
-        resize();
-
     }
 
-    void resize();
 }

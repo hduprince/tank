@@ -7,33 +7,31 @@ import java.awt.*;
 /**
  * @create: 2020-03-27 11:28
  **/
-public class Bullet implements Movable {
+public class Bullet extends GameObject implements Movable {
 
-    private Point point;
+
     private Dir dir;
     private boolean living = true;
     public Group group;
+    private int speed;
 
-
-    private Rectangle rectangle;
-
-    private static final int SPEED = ConfigMgr.getInt("bulletSpeed");
-
-    public static final int WIDTH = ResourceMgr.bulletD.getWidth();
-    public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
-
-    public Bullet(Point point, Dir dir, Group group) {
-        this.point = point;
+    public Bullet(Point center, Dir dir, Group group, GameModel gameModel) {
         this.dir = dir;
         this.group = group;
-        rectangle = new Rectangle(point.x, point.y, WIDTH, HEIGHT);
+        this.gameModel = gameModel;
+        this.width = ResourceMgr.bulletD.getWidth();
+        this.height = ResourceMgr.bulletD.getHeight();
+        this.speed = ConfigMgr.getInt("bulletSpeed");
+        this.point = new Point(center.x-width/2, center.y-height/2);
+        rectangle = new Rectangle(point.x, point.y, width, height);
     }
 
     public void paint(Graphics g) {
 
-        move(dir, point, SPEED);
-        if(point.getX() <= 0 || point.getX()+WIDTH >= TankFrame.GAME_WIDTH
-        || point.getY() <= 80 || point.getY()+HEIGHT >= TankFrame.GAME_HEIGHT){
+        move(dir, point, speed);
+        resize();
+        if(point.getX() <= 0 || point.getX()+width >= TankFrame.GAME_WIDTH
+        || point.getY() <= 80 || point.getY()+height >= TankFrame.GAME_HEIGHT){
             this.die();
         }
         switch (dir) {
@@ -52,33 +50,11 @@ public class Bullet implements Movable {
         }
     }
 
-    public boolean getLiving() {
-        return living;
-    }
-
-    public void setLiving(boolean living) {
-        this.living = living;
-    }
-
-
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
-
-    public void setRectangle(Rectangle rectangle) {
-        this.rectangle = rectangle;
-    }
-
     public void die() {
         this.living = false;
-        GameModel.bullets.remove(this);
+        gameModel.getObjects().remove(this);
     }
 
-    @Override
-    public void resize() {
-        rectangle.setSize(WIDTH, HEIGHT);
-        rectangle.setLocation(point);
-    }
 }
 
 

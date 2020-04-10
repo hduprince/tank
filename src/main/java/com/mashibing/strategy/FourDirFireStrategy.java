@@ -1,7 +1,6 @@
 package com.mashibing.strategy;
 
 import com.mashibing.*;
-import com.mashibing.facade.GameModel;
 
 import java.awt.*;
 
@@ -12,13 +11,13 @@ public class FourDirFireStrategy implements FireStrategy {
 
     @Override
     public void fire(Tank tank) {
-        for(Dir dir : Dir.values()){
-            int bX = tank.point.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
-            int bY = tank.point.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-            Bullet bullet = new Bullet(new Point(bX, bY), dir, tank.group);
-            GameModel.bullets.add(bullet);
+        for (Dir dir : Dir.values()) {
+            int bX = tank.getPoint().x + tank.getWidth() / 2;
+            int bY = tank.getPoint().y + tank.getHeight() / 2;
+            Bullet bullet = new Bullet(new Point(bX, bY), dir, tank.group, tank.getGameModel());
+            tank.getGameModel().getObjects().add(bullet);
         }
 
-        if(tank.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+        if ( tank.group == Group.GOOD ) new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
     }
 }

@@ -1,6 +1,8 @@
 package com.mashibing.facade;
 
 import com.mashibing.*;
+import com.mashibing.cor.Collider;
+import com.mashibing.cor.TankBulletCollider;
 
 import java.awt.*;
 import java.util.Collections;
@@ -13,18 +15,17 @@ import java.util.List;
 public class GameModel {
 
 
-
     private Tank mainTank = new Tank(new Point(200, 400), Dir.LEFT, Group.GOOD, this);
-    public static java.util.List<Bullet> bullets = Collections.synchronizedList(new LinkedList<>());
-    public static java.util.List<Tank> enemies = Collections.synchronizedList(new LinkedList<>());
-    public static List<Explode> explodes = Collections.synchronizedList(new LinkedList<>());
 
+    List<GameObject> objects = Collections.synchronizedList(new LinkedList<>());
+
+    Collider collider = new TankBulletCollider();
 
     public GameModel() {
         new Thread(mainTank).start();
         for (int i = 0; i < ConfigMgr.getInt("enemyCount"); i++) {
             Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD, this);
-            enemies.add(tank);
+            objects.add(tank);
             new Thread(tank).start();
         }
     }
@@ -32,35 +33,29 @@ public class GameModel {
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.yellow);
-        g.drawString("子弹总数:" + bullets.size(), 30, 50);
-        g.drawString("敌军总数:" + enemies.size(), 30, 70);
-        g.drawString("爆炸总数:" + explodes.size(), 30, 90);
+        g.drawString("对象数量 :"+objects.size(), 30, 50);
         g.setColor(c);
         mainTank.paint(g);
 
 
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).paint(g);
-        }
-
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).paint(g);
-        }
-
-        for (int i = 0; i < explodes.size(); i++) {
-            explodes.get(i).paint(g);
+        for (int i = 0; i < objects.size(); i++) {
+            objects.get(i).paint(g);
         }
 
         //碰撞检查
-        for (int j = 0; j < enemies.size(); j++) {
-            for (int i = 0; i < bullets.size() && j < enemies.size(); i++) {
-                enemies.get(j).colliding(bullets.get(i));
+        for (int j = 0; j < objects.size(); j++) {
+            for (int i = j + 1; i < objects.size() && j < objects.size(); i++) {
+                collider.collide(objects.get(j), objects.get(i));
             }
         }
     }
 
     public Tank getMainTank() {
         return mainTank;
+    }
+
+    public List<GameObject> getObjects() {
+        return objects;
     }
 
 }
