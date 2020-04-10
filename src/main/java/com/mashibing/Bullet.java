@@ -1,5 +1,7 @@
 package com.mashibing;
 
+import com.mashibing.facade.GameModel;
+
 import java.awt.*;
 
 /**
@@ -69,7 +71,7 @@ public class Bullet implements Movable {
 
     public void die() {
         this.living = false;
-        TankFrame.bullets.remove(this);
+        GameModel.bullets.remove(this);
     }
 
     @Override

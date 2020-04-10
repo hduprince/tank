@@ -1,6 +1,7 @@
 package com.mashibing;
 
 
+import com.mashibing.facade.GameModel;
 import com.mashibing.strategy.DefaultFireStrategy;
 import com.mashibing.strategy.FireStrategy;
 import com.mashibing.strategy.FourDirFireStrategy;
@@ -22,6 +23,8 @@ public class Tank implements Runnable, Movable {
     private Rectangle rectangle;
     private FireStrategy fireStrategy;
 
+    private GameModel gameModel;
+
 
     private volatile boolean moving = true;
     private static final int SPEED = ConfigMgr.getInt("tankSpeed");;
@@ -31,10 +34,11 @@ public class Tank implements Runnable, Movable {
     private Random random = new Random();
 
 
-    public Tank(Point point, Dir dir, Group group) {
+    public Tank(Point point, Dir dir, Group group, GameModel gameModel) {
         this.point = point;
         this.dir = dir;
         this.group = group;
+        this.gameModel = gameModel;
         rectangle = new Rectangle(point.x, point.y, WIDTH, HEIGHT);
         if(group == Group.GOOD){
             try {
@@ -150,9 +154,9 @@ public class Tank implements Runnable, Movable {
         this.living = false;
         int eX = point.x + Tank.WIDTH/2 - Explode.WIDTH/2;
         int eY = point.y + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-        TankFrame.INSTANCE.explodes.add(new Explode(new Point(eX, eY)));
+        gameModel.explodes.add(new Explode(new Point(eX, eY)));
 
-        TankFrame.enemies.remove(this);
+        gameModel.enemies.remove(this);
     }
 
 
@@ -163,4 +167,10 @@ public class Tank implements Runnable, Movable {
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
     }
+
+
+    public GameModel getGameModel() {
+        return gameModel;
+    }
+
 }

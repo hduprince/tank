@@ -2,6 +2,6 @@ tankSpeed=10
 bulletSpeed=10
 gameWidth=1000
 gameHeight=700
-enemyCount=8
+enemyCount=20
 goodFS=com.mashibing.strategy.FourDirFireStrategy
 badFS=com.mashibing.strategy.DefaultFireStrategy

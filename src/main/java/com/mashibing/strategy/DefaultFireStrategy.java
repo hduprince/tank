@@ -1,6 +1,7 @@
 package com.mashibing.strategy;
 
 import com.mashibing.*;
+import com.mashibing.facade.GameModel;
 
 import java.awt.*;
 
@@ -31,7 +32,7 @@ public class DefaultFireStrategy implements FireStrategy {
                 break;
         }
         Bullet bullet = new Bullet(new Point(x, y), tank.dir, tank.group);
-        TankFrame.bullets.add(bullet);
+        GameModel.bullets.add(bullet);
 
         if(tank.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
     }

@@ -1,5 +1,7 @@
 package com.mashibing;
 
+import com.mashibing.facade.GameModel;
+
 import java.awt.*;
 
 /**
@@ -23,7 +25,7 @@ public class Explode {
         g.drawImage(ResourceMgr.explodeImg[step++], point.x, point.y, null);
 
         if(step >= ResourceMgr.explodeImg.length)
-            TankFrame.INSTANCE.explodes.remove(this);
+            GameModel.explodes.remove(this);
     }
 
 }
