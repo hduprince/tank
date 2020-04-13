@@ -6,7 +6,6 @@ import com.mashibing.strategy.FireStrategy;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -26,6 +25,7 @@ public class Tank extends GameObject implements Runnable, Movable {
 
     public Tank(Point point, Dir dir, Group group, GameModel gameModel) {
         this.point = point;
+        this.oldPoint = new Point();
         this.dir = dir;
         this.group = group;
         this.gameModel = gameModel;
@@ -85,6 +85,8 @@ public class Tank extends GameObject implements Runnable, Movable {
                         || this.point.y <= 80 && dir == Dir.UP
                         || this.point.y + height >= TankFrame.GAME_HEIGHT && dir == Dir.DOWN)
                 ) {
+                    oldPoint.x = point.x;
+                    oldPoint.y = point.y;
                     move(dir, point, speed);
                     resize();
                 }
@@ -93,8 +95,9 @@ public class Tank extends GameObject implements Runnable, Movable {
                 if ( random.nextInt(10) > 8 ) {
                     fire();
                 }
-                if ( random.nextInt(10) > 5 ) {
-                    dir = Arrays.stream(Dir.values()).skip(random.nextInt(4)).findFirst().orElse(Dir.UP);
+                if ( random.nextInt(10) > 7 ) {
+//                    dir = Arrays.stream(Dir.values()).skip(random.nextInt(4)).findFirst().orElse(Dir.UP);
+                    dir = Dir.values()[random.nextInt(4)];
                 }
             }
         }

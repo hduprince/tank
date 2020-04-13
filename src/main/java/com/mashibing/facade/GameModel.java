@@ -3,6 +3,7 @@ package com.mashibing.facade;
 import com.mashibing.*;
 import com.mashibing.cor.Collider;
 import com.mashibing.cor.TankBulletCollider;
+import com.mashibing.cor.TankTankCollider;
 
 import java.awt.*;
 import java.util.Collections;
@@ -19,7 +20,10 @@ public class GameModel {
 
     List<GameObject> objects = Collections.synchronizedList(new LinkedList<>());
 
-    Collider collider = new TankBulletCollider();
+    List<Collider> colliders = new LinkedList();
+
+//    Collider collider = new TankBulletCollider();
+//    Collider collider1 = new TankTankCollider();
 
     public GameModel() {
         new Thread(mainTank).start();
@@ -28,6 +32,9 @@ public class GameModel {
             objects.add(tank);
             new Thread(tank).start();
         }
+
+        colliders.add(new TankBulletCollider());
+        colliders.add(new TankTankCollider());
     }
 
     public void paint(Graphics g) {
@@ -45,7 +52,11 @@ public class GameModel {
         //碰撞检查
         for (int j = 0; j < objects.size(); j++) {
             for (int i = j + 1; i < objects.size() && j < objects.size(); i++) {
-                collider.collide(objects.get(j), objects.get(i));
+                for(Collider collider : colliders) {
+                    if(!collider.collide(objects.get(i), objects.get(j))){
+                        break;
+                    }
+                }
             }
         }
     }

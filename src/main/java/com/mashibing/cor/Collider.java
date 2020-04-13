@@ -8,5 +8,5 @@ import com.mashibing.GameObject;
  * @create: 2020-04-10 17:29
  **/
 public interface Collider {
-    void collide(GameObject o1, GameObject o2);
+    boolean collide(GameObject o1, GameObject o2);
 }

@@ -9,7 +9,7 @@ import java.awt.*;
  **/
 public abstract class GameObject {
 
-
+    protected Point oldPoint;
     protected Point point;
     protected Rectangle rectangle;
     protected int width;
@@ -43,4 +43,12 @@ public abstract class GameObject {
     public GameModel getGameModel() {
         return gameModel;
     }
+
+    public void setbacks(){
+        point.x = oldPoint.x;
+        point.y = oldPoint.y;
+        resize();
+    }
+
+
 }
