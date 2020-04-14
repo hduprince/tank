@@ -14,7 +14,6 @@ public abstract class GameObject {
     protected Rectangle rectangle;
     protected int width;
     protected int height;
-    protected GameModel gameModel;
 
     public abstract void paint(Graphics g);
 
@@ -38,10 +37,6 @@ public abstract class GameObject {
 
     public int getHeight() {
         return height;
-    }
-
-    public GameModel getGameModel() {
-        return gameModel;
     }
 
     public void setbacks(){

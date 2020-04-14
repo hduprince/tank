@@ -24,9 +24,6 @@ public class TankFrame extends Frame {
         return INSTANCE;
     }
 
-
-    GameModel gameModel = new GameModel();
-
     private TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
@@ -44,7 +41,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        gameModel.paint(g);
+        GameModel.getInstance().paint(g);
     }
 
 
@@ -57,7 +54,7 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_DOWN:
-                    gameModel.getMainTank().changeDir(keyCode, true);
+                    GameModel.getInstance().getMainTank().changeDir(keyCode, true);
                     break;
             }
 
@@ -72,10 +69,10 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_DOWN:
-                    gameModel.getMainTank().changeDir(keyCode, false);
+                    GameModel.getInstance().getMainTank().changeDir(keyCode, false);
                     break;
                 case KeyEvent.VK_B:
-                    gameModel.getMainTank().fire();
+                    GameModel.getInstance().getMainTank().fire();
                     break;
             }
         }

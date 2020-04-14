@@ -1,7 +1,9 @@
 package com.mashibing.cor;
 
+import com.mashibing.ConfigMgr;
 import com.mashibing.GameObject;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +27,21 @@ public class ColliderChain implements Collider{
         chain.remove(collider);
     }
 
+
+    public ColliderChain() {
+        String colliders = ConfigMgr.getString("colliders");
+        Arrays.stream(colliders.split(",")).forEach(s -> {
+            try {
+                Collider collider = (Collider) Class.forName(s).newInstance();
+                chain.add(collider);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+        chain.add(new TankBulletCollider());
+        chain.add(new TankTankCollider());
+    }
 
     @Override
     public boolean collide(GameObject o1, GameObject o2) {

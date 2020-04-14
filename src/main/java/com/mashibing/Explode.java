@@ -12,19 +12,21 @@ public class Explode extends GameObject{
     private int step = 0;
 
 
-    public Explode(Point center, GameModel gameModel) {
+    public Explode(Point center) {
         width = ResourceMgr.explodeImg[0].getWidth();
         height = ResourceMgr.explodeImg[0].getHeight();
-        this.gameModel = gameModel;
         this.point = new Point(center.x-width/2, center.y-height/2);
+        GameModel.getInstance().getObjects().add(this);
         new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
 
     public void paint(Graphics g) {
-        g.drawImage(ResourceMgr.explodeImg[step++], point.x, point.y, null);
+        if(step >= ResourceMgr.explodeImg.length) {
+            GameModel.getInstance().getObjects().remove(this);
+            return;
+        }
 
-        if(step >= ResourceMgr.explodeImg.length)
-            gameModel.getObjects().remove(this);
+        g.drawImage(ResourceMgr.explodeImg[step++], point.x, point.y, null);
     }
 
 }

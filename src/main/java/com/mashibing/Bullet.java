@@ -15,15 +15,15 @@ public class Bullet extends GameObject implements Movable {
     public Group group;
     private int speed;
 
-    public Bullet(Point center, Dir dir, Group group, GameModel gameModel) {
+    public Bullet(Point center, Dir dir, Group group) {
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
         this.width = ResourceMgr.bulletD.getWidth();
         this.height = ResourceMgr.bulletD.getHeight();
         this.speed = ConfigMgr.getInt("bulletSpeed");
         this.point = new Point(center.x-width/2, center.y-height/2);
         rectangle = new Rectangle(point.x, point.y, width, height);
+        GameModel.getInstance().getObjects().add(this);
     }
 
     public void paint(Graphics g) {
@@ -52,7 +52,7 @@ public class Bullet extends GameObject implements Movable {
 
     public void die() {
         this.living = false;
-        gameModel.getObjects().remove(this);
+        GameModel.getInstance().getObjects().remove(this);
     }
 
 }

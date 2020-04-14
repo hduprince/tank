@@ -1,13 +1,11 @@
 package com.mashibing.facade;
 
 import com.mashibing.*;
-import com.mashibing.cor.Collider;
 import com.mashibing.cor.ColliderChain;
-import com.mashibing.cor.TankBulletCollider;
-import com.mashibing.cor.TankTankCollider;
 
 import java.awt.*;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,24 +15,33 @@ import java.util.List;
 public class GameModel {
 
 
-    private Tank mainTank = new Tank(new Point(200, 400), Dir.LEFT, Group.GOOD, this);
+    private static final GameModel INSTANCE = new GameModel();
+
+    static {
+        INSTANCE.init();
+    }
+
+
+    private Tank mainTank;
 
     List<GameObject> objects = Collections.synchronizedList(new LinkedList<>());
 
     ColliderChain chain = new ColliderChain();
 
-//    Collider collider = new TankBulletCollider();
-//    Collider collider1 = new TankTankCollider();
 
-    public GameModel() {
+    private GameModel() {}
+
+
+    private void init(){
+        mainTank = new Tank(new Point(200, 400), Dir.LEFT, Group.GOOD);
         new Thread(mainTank).start();
         for (int i = 0; i < ConfigMgr.getInt("enemyCount"); i++) {
-            Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD, this);
-            objects.add(tank);
+            Tank tank = new Tank(new Point(200 + 50 * i, 200), Dir.DOWN, Group.BAD);
             new Thread(tank).start();
         }
-        chain.add(new TankBulletCollider());
-        chain.add(new TankTankCollider());
+
+        new Wall(new Point(100, 100), 200, 30);
+        new Wall(new Point(300, 400), 50, 100);
     }
 
     public void paint(Graphics g) {
@@ -52,6 +59,7 @@ public class GameModel {
         //碰撞检查
         for (int i = 0; i < objects.size(); i++) {
             for (int j = i + 1; i < objects.size() && j < objects.size(); j++) {
+                System.out.println(new Date() + "--i =" + i + ",j=" + j);
                 chain.collide(objects.get(i), objects.get(j));
             }
         }
@@ -65,4 +73,7 @@ public class GameModel {
         return objects;
     }
 
+    public static GameModel getInstance(){
+        return INSTANCE;
+    }
 }

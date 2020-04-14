@@ -23,12 +23,11 @@ public class Tank extends GameObject implements Runnable, Movable {
     private Random random = new Random();
 
 
-    public Tank(Point point, Dir dir, Group group, GameModel gameModel) {
+    public Tank(Point point, Dir dir, Group group) {
         this.point = point;
         this.oldPoint = new Point();
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
         this.speed = ConfigMgr.getInt("tankSpeed");
         this.width = ResourceMgr.goodTank1U.getWidth();
         this.height = ResourceMgr.goodTank1U.getHeight();
@@ -45,6 +44,7 @@ public class Tank extends GameObject implements Runnable, Movable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            GameModel.getInstance().getObjects().add(this);
         }
 
     }
@@ -136,8 +136,8 @@ public class Tank extends GameObject implements Runnable, Movable {
         this.living = false;
         int eX = point.x + width/2;
         int eY = point.y + width/2;
-        gameModel.getObjects().add(new Explode(new Point(eX, eY), gameModel));
-        gameModel.getObjects().remove(this);
+        GameModel.getInstance().getObjects().add(new Explode(new Point(eX, eY)));
+        GameModel.getInstance().getObjects().remove(this);
     }
 
 }
