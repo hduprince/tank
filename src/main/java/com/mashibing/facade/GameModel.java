@@ -59,7 +59,6 @@ public class GameModel {
         //碰撞检查
         for (int i = 0; i < objects.size(); i++) {
             for (int j = i + 1; i < objects.size() && j < objects.size(); j++) {
-                System.out.println(new Date() + "--i =" + i + ",j=" + j);
                 chain.collide(objects.get(i), objects.get(j));
             }
         }
